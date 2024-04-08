@@ -77,7 +77,7 @@ class ComercioService:
         ordenes_encontrados = []
         for orden in ordenes.values():
             if orden.status == status:
-                ordenes_encontrados.append(animal)
+                ordenes_encontrados.append(orden)
         return ordenes_encontrados
 
     def delete_orden(self, orden_id):
@@ -86,6 +86,41 @@ class ComercioService:
             return {"message": "orden eliminado"}
         else:
             return None
+
+    def update_orden(self, orden_id, data):
+        if orden_id in ordenes:
+            orden = ordenes[orden_id]
+
+            client = data.get("client", None)
+            status = data.get("status", None)
+            payment = data.get("payment", None)
+            shipping = data.get("shipping", None)
+            products = data.get("products", None)
+            code = data.get("code", None)
+            expiration = data.get("expiration", None)
+            order_type = data.get("order_type", None)          
+            
+            if client:
+                orden.client = client
+            if status:
+                orden.status = status
+            if payment:
+                orden.payment = payment
+            if shipping:
+                orden.shipping = shipping
+            if products:
+                orden.products = products
+            if code:
+                orden.code = code
+            if expiration:
+                orden.expiration = expiration
+            if order_type:
+                orden.order_type = order_type
+            
+            return orden
+        else:
+            raise None
+        
 
             
         
@@ -143,6 +178,20 @@ class ComercioRequestHandler(BaseHTTPRequestHandler):
                self, 404, {"message": "Ruta no encontrada"}
            )
         
+    def do_DELETE(self):
+        if self.path.startswith("/orders/"):
+            id = int(self.path.split("/")[-1])
+            response_data = self.comercio_service.delete_orden(id)
+            if response_data:
+                HTTPDataHandler.handle_response(self, 200, response_data)
+            else:
+                HTTPDataHandler.handle_response(
+                    self, 404, {"message": "orden no encontrado"}
+                )
+        else:
+            HTTPDataHandler.handle_response(
+                self, 404, {"message": "Ruta no encontrada"}
+            )
 def main():
     try:
         server_address = ("", 8000)
@@ -155,5 +204,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main()   # :(
+  
 
