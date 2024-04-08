@@ -30,6 +30,12 @@ ruta=f"{url_o}?status={status}"
 r = requests.request(method="GET", url=ruta)
 print(r.text)
 
+# delete
+id=1
+ruta_del = f"{url_o}/{id}"
+r = requests.request(method="DELETE", url=ruta_del)
+print(r.text)
+
 
 
 

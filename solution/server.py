@@ -80,12 +80,14 @@ class ComercioService:
                 ordenes_encontrados.append(animal)
         return ordenes_encontrados
 
-     def delete_orden(self, id):
-        if id in ordenes:
-            del ordenes[id]
+    def delete_orden(self, orden_id):
+        if orden_id in ordenes:
+            del ordenes[orden_id]
             return {"message": "orden eliminado"}
         else:
             return None
+
+            
         
 
 
@@ -125,21 +127,21 @@ class ComercioRequestHandler(BaseHTTPRequestHandler):
         else:
             HTTPDataHandler.handle_response(self, 404, {"message": "ruta no encontrada"})
     
-     def do_PUT(self):
-        if self.path.startswith("/orders/"):
-            id = int(self.path.split("/")[-1])
-            data = HTTPDataHandler.handle_reader(self)
-            response_data = self.comercio_service.update_orden(id, data)
-            if response_data:
-                HTTPDataHandler.handle_response(self, 200, response_data.__dict__)
-            else:
-                HTTPDataHandler.handle_response(
-                    self, 404, {"message": "orden no encontrado"}
-                )
-        else:
-            HTTPDataHandler.handle_response(
-                self, 404, {"message": "Ruta no encontrada"}
-            )
+    def do_PUT(self):
+       if self.path.startswith("/orders/"):
+           id = int(self.path.split("/")[-1])
+           data = HTTPDataHandler.handle_reader(self)
+           response_data = self.comercio_service.update_orden(id, data)
+           if response_data:
+               HTTPDataHandler.handle_response(self, 200, response_data.__dict__)
+           else:
+               HTTPDataHandler.handle_response(
+                   self, 404, {"message": "orden no encontrado"}
+               )
+       else:
+           HTTPDataHandler.handle_response(
+               self, 404, {"message": "Ruta no encontrada"}
+           )
         
 def main():
     try:
