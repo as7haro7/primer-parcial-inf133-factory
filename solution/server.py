@@ -15,22 +15,25 @@ class OrdenComercio:
         self.code = code
         self.expiration = expiration
         self.order_type = order_type
+    
+# no se orientada a objetos con python :(
 
 class Fisica(OrdenComercio):
-    def __init__(self, client, status, payment, shipping, products, code, expiration, order_type ):
-        super().__init__(client, status, payment, shipping, products, code, expiration, "Fisica")
+    def __init__(self, client, status, payment, shipping, products, order_type ):
+        super().__init__(client, status, payment, shipping, products, None, None, "Fisica")
 
 class Digital(OrdenComercio):
-    def __init__(self, client, status, payment, shipping, products, code, expiration, order_type ):
-        super().__init__(client, status, payment, shipping, products, code, expiration, "Digital")
+    def __init__(self, client, status, payment, code, expiration, order_type ):
+        super().__init__(client, status, payment, None, None, code, expiration, "Digital")
 
 class ComercioFactory:
     @staticmethod
     def create_orden( client, status, payment, shipping, products, code, expiration, order_type):
         if order_type == "fisica":
-            return Fisica(client, status, payment, shipping, products, code, expiration, order_type)
+            # return Fisica(client, status, payment, shipping, products, code, expiration, order_type)
+            return Fisica(client, status, payment, shipping, products, order_type)
         elif order_type == "digital":
-            return Digital(client, status, payment, shipping, products, code, expiration, order_type)
+            return Digital(client, status, payment, code, expiration, order_type)
 
         else:
             raise ValueError("no valido")
@@ -67,6 +70,7 @@ class ComercioService:
         orden_com = self.factory.create_orden(
             client, status, payment, shipping, products, code, expiration, order_type
         )
+        
         ordenes[len(ordenes) + 1] = orden_com
         return orden_com
     
